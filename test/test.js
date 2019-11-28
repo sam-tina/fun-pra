@@ -1,5 +1,5 @@
 var assert = require('assert')
-var { repeat } = require('../src/func')
+var { repeat,repeat2 } = require('../src/func-repeat')
 
 describe('Array', function() {
   describe('#indexOf()', function() {
@@ -9,7 +9,10 @@ describe('Array', function() {
   })
 })
 
-describe('Func', function() {
+describe('Func-repeat', function() {
+  /**
+   * repeat test
+   */
   describe('#repeat("x", 0)', function() {
     it('times: 0, result: ""', function () {
       assert.equal(repeat('x', 0), '')
@@ -25,6 +28,39 @@ describe('Func', function() {
   describe('#repeat("x", 2)', function() {
     it('times: 2, result: "xx"', function () {
       assert.equal(repeat('x', 2), 'xx')
+    })
+  })
+
+  describe('#repeat("x", 4)', function() {
+    it('times: 4, result: "xxxx"', function () {
+      assert.equal(repeat('x', 4), 'xxxx')
+    })
+  })
+
+  /**
+   * repeat2 test
+   */
+  describe('#repeat2("x", 0)', function() {
+    it('times: 0, result: ""', function () {
+      assert.equal(repeat2('x', 0), '')
+    })
+  })
+
+  describe('#repeat2("x", 1)', function() {
+    it('times: 1, result: "x"', function () {
+      assert.equal(repeat2('x', 1), 'x')
+    })
+  })
+
+  describe('#repeat2("x", 2)', function() {
+    it('times: 2, result: "xx"', function () {
+      assert.equal(repeat2('x', 2), 'xx')
+    })
+  })
+
+  describe('#repeat2("x", 4)', function() {
+    it('times: 4, result: "xxxx"', function () {
+      assert.equal(repeat2('x', 4), 'xxxx')
     })
   })
 })
