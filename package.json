@@ -1,0 +1,22 @@
+{
+  "name": "fun-pra",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sam-tina/fun-pra.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sam-tina/fun-pra/issues"
+  },
+  "homepage": "https://github.com/sam-tina/fun-pra#readme",
+  "devDependencies": {
+    "mocha": "^6.2.2"
+  }
+}
