@@ -1,5 +1,6 @@
 var assert = require('assert')
 var { repeat,repeat2 } = require('../src/func-repeat')
+var { isArrayLike } = require('../src/func-underscore')
 
 describe('Array', function() {
   describe('#indexOf()', function() {
@@ -61,6 +62,17 @@ describe('Func-repeat', function() {
   describe('#repeat2("x", 4)', function() {
     it('times: 4, result: "xxxx"', function () {
       assert.equal(repeat2('x', 4), 'xxxx')
+    })
+  })
+})
+
+describe('Underscore', function() {
+  describe('#un-isArrayLike', function () {
+    it('[1, 2] is Array', function () {
+      assert.equal(isArrayLike([1, 2]), true)
+    })
+    it('{length: 10} is Array', function() {
+      assert.equal(isArrayLike({ length: 10 }), true)
     })
   })
 })
