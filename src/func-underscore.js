@@ -51,11 +51,33 @@ function allKeys(obj) {
   if (!isObject(obj)) return []
 
   var keys = []
-  for (var key in obj) keys.push(key)
+  for (var key in obj) keys.push(key) // for in 还包含原型链上的properties
+  return keys
+}
+
+function keys(obj) {
+  if (!isObject(obj)) return []
+
+  if (Object.keys) {
+    return Object.keys(obj) // 只返回own enumerable properties组成的数组
+  }
+
+  var keys = []
+
+  for (var key in obj)  {
+    if (has(obj, key)) { // 只返回own enumerable properties组成的数组
+      keys.push(key)
+    }
+  }
   return keys
 }
 
 var extend = createAssigner(allKeys)
+
+function has(obj, key) {
+  return obj != null && Object.prototype.hasOwnProperty.call(obj, key)
+}
+
 
 // function createPredicateIndexFinder(dir) {
 //   return function(array, predicate, context) {
