@@ -1,6 +1,6 @@
 var assert = require('assert')
 var { repeat,repeat2 } = require('../src/func-repeat')
-var { isArrayLike, extend } = require('../src/func-underscore')
+var { isArrayLike, extend, each } = require('../src/func-underscore')
 
 describe('Array', function() {
   describe('#indexOf()', function() {
@@ -79,6 +79,18 @@ describe('Underscore', function() {
   describe('#extend', function() {
     it('{name: "cson"}, {age: 10} => {name: "cson", age: 10}', function() {
       assert.deepEqual(extend({name: 'cson'}, {age: 10}), {name: 'cson', age: 10})
+    })
+  })
+
+  describe('#each', function() {
+    it('each test', function() {
+      each([1, 2, 3], function(item, index) {
+        console.log('each:', item)
+      })
+
+      each({name: 'cson', age: '19'}, function(item, index) {
+        console.log(item)
+      })
     })
   })
 })

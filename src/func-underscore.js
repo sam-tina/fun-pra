@@ -18,6 +18,10 @@ function isArrayLike(collection) {
   return typeof length == 'number' && length >= 0 && length <= MAX_ARRAY_INDEX
 }
 
+function isFunction(obj) {
+  return typeof obj == 'function' || false
+}
+
 function isObject(obj) {
   var type = typeof obj
   return type === 'function' || type === 'object' && !!obj
@@ -73,6 +77,7 @@ function keys(obj) {
 }
 
 var extend = createAssigner(allKeys)
+var extendOwn = assign = createAssigner(keys)
 
 function has(obj, key) {
   return obj != null && Object.prototype.hasOwnProperty.call(obj, key)
@@ -96,9 +101,101 @@ function has(obj, key) {
 //   }
 // }
 
+// =======
 
+var isMatch = function(object, attrs) {
+  var keys = keys(attrs), length = keys.length
+
+  if (object == null) {
+    return !length
+  }
+
+  var obj = Object(object)
+
+  for (var i = 0; i < length; i++) {
+    var key = keys[i]
+
+    // key不存在，或者key对应的value不相等，均认为键值对不对等
+    if (!(key in obj) || (obj[key] !== attrs[key])) {
+      return false
+    }
+  }  
+  return true
+}
+
+var matcher = matches = function(attrs) {
+  attrs = extendOwn({}, attrs)
+  return function(obj) {
+    return isMatch(obj, attrs)
+  }
+}
+
+var optimizeCb = function(func, context, argCount) {
+  if (context === void 0) {
+    return func
+  }
+
+  switch (argCount == null ? 3 : argCount) {
+    case 1: return function(value) { // 一个参数
+      return func.call(context, value)
+    }
+    case 2: return function(value, other) { // 2个参数
+      return func.call(context, value, other)
+    }
+    case 3: return function (value, index, collection) { // 默认3个参数
+      return func.call(context, value, index, collection)
+    }
+    case 4: return function(accumulator, value, index, collection) {
+      return func.call(context, accumulator, value, index, collection)
+    }
+  }
+
+  return function() {
+    return func.apply(context, arguments)
+  }
+}
+
+var cb = function(value, context, argCount) {
+  if (value == null) return identity
+  if (isFunction(value)) {
+    return optimizeCb(value, context, argCount)
+  }
+  if (isObject(value)) {
+    return matcher(value)
+  }
+  return property(value)
+}
+
+function identity(value) {
+  return value
+}
+
+function iteratee(value, context) {
+  return cb(value, context, Infinity) // context => index || key
+}
+
+//array: [2, 3, 4], obj: {name: 'csonchen', age: 26}
+var each = forEach = function(obj, iteratee, context) {
+  iteratee = optimizeCb(iteratee, context)
+
+  var i, length;
+
+  if (isArrayLike(obj)) {
+    for (i = 0, length = obj.length; i < length; i++) {
+      iteratee(obj[i], i, obj)
+    }
+  } else {
+    var keys = keys(obj); // [name, age]
+    for (i = 0, length = keys.length; i < length; i++) {
+      iteratee(obj[keys[i]], keys[i], obj)
+    }
+  }
+
+  return obj
+}
 
 module.exports = {
   isArrayLike,
   extend,
+  each,
 }
